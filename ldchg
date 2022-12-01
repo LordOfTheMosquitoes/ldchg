@@ -1,0 +1,21 @@
+#!/bin/sh
+
+SPEED=0.05
+
+# Napraviti variable za speed
+
+[ "$1" == "1" ] || [ "$1" == "0" ] && echo "$1" > /sys/class/leds/tpacpi\:\:lid_logo_dot/brightness
+
+STRING=$1
+
+if [ $# -eq 0 ]; then
+	read STRING
+fi
+
+for (( i=0; i<${#STRING}; i++ )); do
+	[ "${STRING:$i:1}" == "1" ] || [ "${STRING:$i:1}" == "0" ] && echo ${STRING:$i:1} > /sys/class/leds/tpacpi\:\:lid_logo_dot/brightness
+	[ "${STRING:$i:1}" = " " ] && echo 0 > /sys/class/leds/tpacpi\:\:lid_logo_dot/brightness 
+	sleep $SPEED
+  done
+
+[ "$1" != "1" ] || [ "$1" != "0" ] && echo 1 > /sys/class/leds/tpacpi\:\:lid_logo_dot/brightness
